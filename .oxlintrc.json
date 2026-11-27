@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "overrides": [
+    {
+      "files": ["src/world/**", "src/ui/laptop/SlicerApp.tsx"],
+      "rules": { "react/immutability": "off", "react/preserve-manual-memoization": "off" }
+    }
+  ]
+}

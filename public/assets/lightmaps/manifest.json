@@ -1,0 +1,47 @@
+{
+ "Floor": {
+  "file": "/assets/lightmaps/Floor.jpg",
+  "scale": 2.0,
+  "p99": 0.234
+ },
+ "Walls": {
+  "file": "/assets/lightmaps/Walls.jpg",
+  "scale": 2.0,
+  "p99": 0.285
+ },
+ "Ceiling": {
+  "file": "/assets/lightmaps/Ceiling.jpg",
+  "scale": 2.0,
+  "p99": 0.344
+ },
+ "OSBWall": {
+  "file": "/assets/lightmaps/OSBWall.jpg",
+  "scale": 2.0,
+  "p99": 0.21
+ },
+ "GarageDoor": {
+  "file": "/assets/lightmaps/GarageDoor.jpg",
+  "scale": 2.0,
+  "p99": 1.74
+ },
+ "HouseDoorFrame": {
+  "file": "/assets/lightmaps/HouseDoorFrame.jpg",
+  "scale": 2.0,
+  "p99": 0.231
+ },
+ "HouseDoorSlab": {
+  "file": "/assets/lightmaps/HouseDoorSlab.jpg",
+  "scale": 2.0,
+  "p99": 0.229
+ },
+ "Window": {
+  "file": "/assets/lightmaps/Window.jpg",
+  "scale": 2.0,
+  "p99": 0.565
+ },
+ "Electrical": {
+  "file": "/assets/lightmaps/Electrical.jpg",
+  "scale": 2.0,
+  "p99": 0.204
+ }
+}

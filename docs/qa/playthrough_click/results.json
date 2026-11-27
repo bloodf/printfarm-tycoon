@@ -1,0 +1,267 @@
+[
+ {
+  "check": "boot",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "menu",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "new game",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "no avatar / first-person mode in the build",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "toolbar \u2192 laptop",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "read mail (goal 1)",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "slice \u2192 USB",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "close laptop with the mouse",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click printer \u2192 popover",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "start print from the popover",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "toolbar fast-forward",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "force E302 fan failure (harness)",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "printer in error state",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "error toast shown",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the erroring printer",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "fix needs a spare fan (disabled, none in stock)",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "timed fix \u2192 print resumes",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the damp blue spool on the shelf",
+  "pass": true,
+  "detail": "moisture 0.48"
+ },
+ {
+  "check": "take it",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the filament dryer",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "put it in the dryer",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "print finished",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click printer again",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "timed 'Remove print' button",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click packing table",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "place the print on the table",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click packing table again",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "open the packing station",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "packed (mouse only)",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the packed parcel",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "pick up the parcel",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the outbox",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "parcel in the outbox",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "spool dried below 5% + goal",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the dryer",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "take the dry spool out",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the shelf",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "store it",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "power goes out",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "outage banner",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "power back",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "internet goes down",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "Shop says offline",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "internet back",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "bought filament in the Shop",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "courier shipped + paid",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the house door",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "end the day",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "day 2",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "click the delivery",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "timed unpack",
+  "pass": true,
+  "detail": ""
+ },
+ {
+  "check": "zero keyboard events (mouse only)",
+  "pass": true,
+  "detail": "keydown events: 0"
+ },
+ {
+  "check": "no console errors",
+  "pass": true,
+  "detail": "[]"
+ }
+]

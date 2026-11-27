@@ -1,0 +1,50 @@
+{
+  "name": "printfarm-tycoon",
+  "private": true,
+  "version": "0.1.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "oxlint src",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node tools/qa/run_e2e.mjs click low",
+    "test:all": "npm run lint && npm run test:unit && npm run build && npm run test:e2e",
+    "qa:click": "node tools/qa/run_e2e.mjs click low",
+    "qa:beauty": "node tools/qa/run_e2e.mjs beauty high",
+    "assets:textures": "python3 tools/textures/build_textures.py && python3 tools/textures/build_decals.py",
+    "assets:models": "bash tools/build_all_assets.sh",
+    "assets:optimize": "node tools/optimize_models.mjs",
+    "assets:audio": "python3 tools/audio/build_audio.py",
+    "assets:retexture": "node tools/retexture.mjs && node tools/optimize_models.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/rajdhani": "^5.3.0",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "@react-three/postprocessing": "^3.2.2",
+    "lucide-react": "^1.75.0",
+    "postprocessing": "^6.39.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.187.0",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "^4.5.1",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "oxlint": "^1.88.0",
+    "typescript": "~7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.1.1"
+  }
+}
