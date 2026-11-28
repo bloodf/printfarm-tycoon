@@ -197,10 +197,11 @@ export function PauseMenu() {
 
 function ControlsCheatSheet() {
   const rows: [string, string][] = [['Left-drag', 'Rotate the view'], ['Right / middle-drag', 'Rotate / pan'], ['Wheel', 'Zoom'], ['Double-click floor', 'Move the view there'],
-    ['Click object', 'Actions'], ['WASD (optional)', 'Pan'], ['Toolbar', 'Laptop · time · end day']]
+    ['Touch drag', 'Rotate the view'], ['Two fingers', 'Pan and pinch to zoom'],
+    ['Click or tap object', 'Actions'], ['WASD (optional)', 'Pan'], ['Toolbar', 'Laptop · zoom · time · end day']]
   return (
     <div className="cheats glass small">
-      {rows.map(([k, l]) => (<div key={l} className="row"><span className="keycap sm">{k}</span><span className="muted">{l}</span></div>))}
+      {rows.map(([k, l]) => (<div key={k} className="row"><span className="keycap sm">{k}</span><span className="muted">{l}</span></div>))}
     </div>
   )
 }

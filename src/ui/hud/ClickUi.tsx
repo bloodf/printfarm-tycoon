@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Camera, FastForward, Laptop as LaptopIcon, Menu, Moon, Pause, Play, X } from 'lucide-react'
+import { Camera, FastForward, Laptop as LaptopIcon, Menu, Moon, Pause, Play, X, ZoomIn, ZoomOut } from 'lucide-react'
 import { useGame, type Prompt } from '../../game/store'
 import { canSleep } from '../../sim/sim'
 import { sfx } from '../../game/audio'
@@ -62,7 +62,7 @@ export function ActionPopover() {
   const t = it?.target()
   if (!t) return null
   const close = () => setPopover(null)
-  const x = Math.min(pop.x + 16, window.innerWidth - 320)
+  const x = Math.max(8, Math.min(pop.x + 16, window.innerWidth - 320))
   const y = Math.min(pop.y - 10, window.innerHeight - 60 - t.prompts.length * 46 - 80)
   return (
     <div className="popover glass anim-rise" style={{ left: x, top: Math.max(70, y) }} onMouseDown={(e) => e.stopPropagation()}>
@@ -113,6 +113,10 @@ export function Toolbar() {
       {btn('ff', '8×', <FastForward size={18} />, () => !ff && g.toggleFastForward(), ff)}
       <span className="tb-sep" />
       {btn('cam', 'Reset view', <Camera size={18} />, () => orbit.reset())}
+      <span className="touch-zoom">
+        {btn('zoom-in', 'Zoom in', <ZoomIn size={18} />, () => orbit.zoom(0.8))}
+        {btn('zoom-out', 'Zoom out', <ZoomOut size={18} />, () => orbit.zoom(1.25))}
+      </span>
       {btn('endday', canSleep(g.sim) ? 'End day' : 'End day (17:00)', <Moon size={18} />, () => g.goToSleep(), false)}
       {btn('menu', 'Menu', <Menu size={18} />, () => g.open('pause'))}
     </div>

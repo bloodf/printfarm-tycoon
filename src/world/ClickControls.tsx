@@ -1,5 +1,6 @@
 /**
- * Point & Click controls: the only control scheme (decision D11: no avatar, mouse-only play).
+ * Pointer controls: no avatar, with mouse and touch navigation.
+ * Touch drag rotates; two fingers pan and pinch to zoom. The toolbar also provides zoom buttons.
  *  - OrbitCamera: orbit (left/right-drag), pan (middle-drag or Shift+drag, WASD), zoom (wheel), double-click floor to
  *    re-centre. Kept inside the garage. Eases into close-up poses for the laptop, packing station and printers.
  *  - ClickPicker: hover → outline + cursor tooltip; click → action popover with the object's actions.
@@ -36,6 +37,9 @@ export const orbit = {
     this.goal.target.copy(p)
     this.goal.dist = dist
     this.goal.pitch = Math.min(Math.max(this.goal.pitch, 0.35), 0.75)
+  },
+  zoom(factor: number) {
+    this.goal.dist = THREE.MathUtils.clamp(this.goal.dist * factor, 0.7, 6)
   },
 }
 
@@ -82,13 +86,39 @@ export function OrbitCamera() {
   useEffect(() => {
     const el = gl.domElement
     const active = () => useGame.getState().screen === 'game' && !useGame.getState().overlay
+    const touches = new Map<number, { x: number; y: number }>()
+    let pinch: { x: number; y: number; distance: number } | null = null
+    const touchPair = () => {
+      const [a, b] = [...touches.values()]
+      return a && b ? { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, distance: Math.hypot(b.x - a.x, b.y - a.y) } : null
+    }
     const down = (e: PointerEvent) => {
       if (!active()) return
+      if (e.pointerType === 'touch') {
+        el.setPointerCapture(e.pointerId)
+        touches.set(e.pointerId, { x: e.clientX, y: e.clientY })
+        pinch = touchPair()
+        if (pinch) { drag.current = null; orbit.dragged = true; return }
+      }
       const pan = e.button === 1 || (e.button === 0 && e.shiftKey)
       drag.current = { mode: pan ? 'pan' : 'rotate', x: e.clientX, y: e.clientY, moved: 0, button: e.button }
       orbit.dragged = false
     }
     const move = (e: PointerEvent) => {
+      if (touches.has(e.pointerId)) {
+        touches.set(e.pointerId, { x: e.clientX, y: e.clientY })
+        const pair = touchPair()
+        if (pair && pinch && active()) {
+          const k = orbit.goal.dist * 0.0016
+          orbit.goal.target.addScaledVector(new THREE.Vector3(Math.cos(orbit.yaw), 0, -Math.sin(orbit.yaw)), -(pair.x - pinch.x) * k)
+          orbit.goal.target.addScaledVector(new THREE.Vector3(-Math.sin(orbit.yaw), 0, -Math.cos(orbit.yaw)), (pair.y - pinch.y) * k)
+          clampTarget(orbit.goal.target)
+          if (pair.distance > 0 && pinch.distance > 0) orbit.goal.dist = THREE.MathUtils.clamp(orbit.goal.dist * pinch.distance / pair.distance, 0.7, 6)
+          pinch = pair
+          orbit.dragged = true
+          return
+        }
+      }
       const d = drag.current
       if (!d || !active()) return
       const dx = e.clientX - d.x
@@ -110,14 +140,16 @@ export function OrbitCamera() {
         clampTarget(orbit.goal.target)
       }
     }
-    const up = () => {
+    const up = (e: PointerEvent) => {
+      touches.delete(e.pointerId)
+      pinch = null
       drag.current = null
       setTimeout(() => (orbit.dragged = false), 0)
     }
     const wheel = (e: WheelEvent) => {
       if (!active()) return
       e.preventDefault()
-      orbit.goal.dist = THREE.MathUtils.clamp(orbit.goal.dist * Math.exp(e.deltaY * 0.0012), 0.7, 6)
+      orbit.zoom(Math.exp(e.deltaY * 0.0012))
     }
     const dbl = (e: MouseEvent) => {
       if (!active()) return
@@ -135,6 +167,7 @@ export function OrbitCamera() {
     el.addEventListener('pointerdown', down)
     window.addEventListener('pointermove', move)
     window.addEventListener('pointerup', up)
+    window.addEventListener('pointercancel', up)
     el.addEventListener('wheel', wheel, { passive: false })
     el.addEventListener('dblclick', dbl)
     el.addEventListener('contextmenu', ctx)
@@ -142,6 +175,7 @@ export function OrbitCamera() {
       el.removeEventListener('pointerdown', down)
       window.removeEventListener('pointermove', move)
       window.removeEventListener('pointerup', up)
+      window.removeEventListener('pointercancel', up)
       el.removeEventListener('wheel', wheel)
       el.removeEventListener('dblclick', dbl)
       el.removeEventListener('contextmenu', ctx)
@@ -221,6 +255,29 @@ export function dropAtView() {
 
 const sig = (h: HoverTarget | null) => (h ? `${h.uid}|${h.title}|${h.subtitle}|${h.prompts.map((p) => p.label + (p.disabled ?? '')).join(',')}` : '')
 
+function pickInteractable(camera: THREE.Camera, point: THREE.Vector2): { it: Interactable; target: HoverTarget } | null {
+  const ray = new THREE.Raycaster()
+  ray.setFromCamera(point, camera)
+  ray.far = 12
+  const hits = ray.intersectObjects([...interactables.values()].map((it) => it.object), true)
+  const near = hits[0]?.distance ?? 0
+  const candidates: { it: Interactable; distance: number }[] = []
+  const seen = new Set<string>()
+  for (const hit of hits) {
+    const uid: unknown = hit.object.userData.uid
+    const it = typeof uid === 'string' ? interactables.get(uid) : undefined
+    if (!it || seen.has(it.uid) || hit.distance > near + 0.6) continue
+    seen.add(it.uid)
+    candidates.push({ it, distance: hit.distance })
+  }
+  candidates.sort((a, b) => (b.it.priority ?? 0) - (a.it.priority ?? 0) || a.distance - b.distance)
+  for (const { it } of candidates) {
+    const target = it.target()
+    if (target) return { it, target }
+  }
+  return null
+}
+
 /** Mouse picking for Point & Click. */
 export function ClickPicker() {
   const { camera, gl } = useThree()
@@ -228,7 +285,6 @@ export function ClickPicker() {
   const over = useRef(false)
   const scan = useRef(0)
   const last = useRef('')
-  const hovered = useRef<Interactable | null>(null)
 
   useEffect(() => {
     const el = gl.domElement
@@ -244,7 +300,10 @@ export function ClickPicker() {
     const click = (e: MouseEvent) => {
       const st = useGame.getState()
       if (st.screen !== 'game' || st.overlay || e.button !== 0 || orbit.dragged) return
-      const it = hovered.current
+      const rect = el.getBoundingClientRect()
+      const point = new THREE.Vector2(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1)
+      // Touch has no preceding hover; pick at the tap instead of using the last mouse target.
+      const it = pickInteractable(camera, point)?.it
       if (it) {
         const t = it.target()
         if (t) {
@@ -266,14 +325,13 @@ export function ClickPicker() {
       el.removeEventListener('pointerleave', leave)
       el.removeEventListener('click', click)
     }
-  }, [gl])
+  }, [camera, gl])
 
   useFrame((_, dt) => {
     const st = useGame.getState()
     if (st.screen !== 'game' || st.overlay) {
       if (st.hover) st.setHover(null)
       outlineTargets.length = 0
-      hovered.current = null
       return
     }
     scan.current -= dt
@@ -282,34 +340,12 @@ export function ClickPicker() {
     let found: HoverTarget | null = null
     let best: Interactable | null = null
     if (over.current && !orbit.dragged) {
-      const ray = new THREE.Raycaster()
-      ray.setFromCamera(ndc.current, camera)
-      ray.far = 12
-      const objs: THREE.Object3D[] = []
-      for (const i of interactables.values()) objs.push(i.object)
-      const hits = ray.intersectObjects(objs, true)
-      const near = hits.length ? hits[0].distance : 0
-      const cands: { it: Interactable; d: number }[] = []
-      const seen = new Set<string>()
-      for (const h of hits) {
-        const uid = h.object.userData.uid as string | undefined
-        const it = uid ? interactables.get(uid) : undefined
-        if (!it || seen.has(it.uid) || h.distance > near + 0.6) continue
-        seen.add(it.uid)
-        cands.push({ it, d: h.distance })
-      }
-      cands.sort((a, b) => (b.it.priority ?? 0) - (a.it.priority ?? 0) || a.d - b.d)
-      for (const c of cands) {
-        found = c.it.target()
-        if (found) {
-          best = c.it
-          break
-        }
-      }
+      const picked = pickInteractable(camera, ndc.current)
+      found = picked?.target ?? null
+      best = picked?.it ?? null
     }
     // keep the outline on the object whose popover is open
     const pop = st.popover ? interactables.get(st.popover.uid) : null
-    hovered.current = best
     outlineTargets.length = 0
     outlineTargets.push(...(best?.outline ?? pop?.outline ?? []))
     gl.domElement.style.cursor = best ? 'pointer' : 'grab'

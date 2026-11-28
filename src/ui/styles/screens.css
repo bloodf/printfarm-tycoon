@@ -248,3 +248,52 @@
   background: rgba(120,16,18,.88); border: 1px solid rgba(255,90,90,.6); font-family: var(--font-display); font-weight: 700; letter-spacing: .06em; font-size: 16px;
   box-shadow: 0 0 30px rgba(255,40,40,.25); animation: pulse 2s ease-in-out infinite; }
 .hud-goals { top: 178px; }
+.touch-zoom { display: none; }
+@media (pointer: coarse), (max-width: 900px) { .touch-zoom { display: flex; } }
+
+@media (max-width: 900px) {
+  .menu { padding: max(16px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)); overflow-y: auto; align-items: flex-start; flex-direction: column; }
+  .menu-left { width: 100%; margin-top: 20px; }
+  .logo { gap: 10px; }
+  .logo-mark { width: 52px; height: 52px; }
+  .logo-title { font-size: clamp(30px, 10vw, 48px); }
+  .logo-sub { font-size: 20px; letter-spacing: .35em; }
+  .menu-buttons, .menu-savecard, .menu-mode { width: 100%; }
+  .menu-foot { position: static; margin-top: 20px; }
+  .modal, .report { max-height: calc(100dvh - 24px); padding: 16px; }
+  .settings-tabs { overflow-x: auto; }
+  .settings-tabs button { flex-shrink: 0; }
+  .srow { flex-wrap: wrap; gap: 8px; }
+  .srow-ctl { width: 100%; justify-content: stretch; }
+  .srow-ctl > * { max-width: 100%; }
+  .binds, .credits-grid, .report-cols { grid-template-columns: minmax(0, 1fr); }
+  .report-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hud-clock, .hud-money { top: max(8px, env(safe-area-inset-top)); width: calc(50% - 12px); min-width: 0; padding: 8px; }
+  .hud-clock { left: 8px; }
+  .hud-money { right: 8px; }
+  .hud-time { font-size: 30px; }
+  .hud-cash { font-size: 22px; }
+  .hud-goals { top: 142px; left: 8px; width: min(260px, calc(100vw - 16px)); max-height: 22dvh; overflow-y: auto; }
+  .toolbar { left: 8px; right: 8px; bottom: max(8px, env(safe-area-inset-bottom)); transform: none; overflow-x: auto; }
+  .tb-btn { flex-shrink: 0; min-height: 44px; }
+  .held, .toasts { right: 8px; width: min(300px, calc(100vw - 16px)); }
+  .popover { max-width: calc(100vw - 16px); max-height: calc(100dvh - 16px); overflow-y: auto; }
+  .laptop { width: 100%; height: 100dvh; border: 0; border-radius: 0; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  .laptop-hint { display: none; }
+  .os-top { min-height: 44px; flex-shrink: 0; }
+  .os-body { flex-direction: column-reverse; }
+  .os-dock { width: 100%; flex-direction: row; overflow-x: auto; padding: 6px; flex-shrink: 0; }
+  .os-app { flex: 0 0 62px; min-height: 44px; }
+  .os-icon { width: 30px; height: 30px; }
+  .os-window { min-height: 0; overflow-y: auto; }
+  .app { padding: 12px; overflow-y: auto; }
+  .app-head { flex-wrap: wrap; gap: 8px; }
+  .mail-split, .slicer-grid, .bank-top { display: flex; flex-direction: column; min-height: auto; }
+  .mail-list { max-height: 30dvh; flex-shrink: 0; }
+  .shop-grid { display: flex; flex-direction: column; min-height: auto; }
+  .shop-main { overflow: visible; }
+  .farm-grid { grid-template-columns: minmax(0, 1fr); }
+  .btn, .pop-btn { min-height: 44px; }
+  .iconbtn { min-width: 44px; min-height: 44px; }
+  input, select, textarea { font-size: max(16px, 1em); }
+}
